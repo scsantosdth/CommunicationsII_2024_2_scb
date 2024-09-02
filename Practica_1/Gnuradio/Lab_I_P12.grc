@@ -1,0 +1,150 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb_qt_gui
+    hier_block_src_path: '.:'
+    id: Lab_I_P12
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Punto_12
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [224, 16.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\n\nclass blk(gr.sync_block):\n\
+      \    \n    def __init__(self):\n        # solo argumentos por defecto aqu\xED\
+      \n        gr.sync_block.__init__(\n            self,\n            name='Acomulador',\
+      \  # nombre que aparecer\xE1 en GRC\n            in_sig=[np.float32],\n    \
+      \        out_sig=[np.float32]\n        )\n\n    def work(self, input_items,\
+      \ output_items):\n        x = input_items[0]  # Se\xF1al de entrada\n      \
+      \  y0 = output_items[0]  # Se\xF1al acumulada\n        y0[:] = np.cumsum(x)\
+      \  # Acumula la se\xF1al de entrada\n        \n        return len(y0)  # Devolver\
+      \ la longitud de la se\xF1al de salida\n\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Acomulador', 'blk', [], [('0', 'float', 1)], [('0', 'float', 1)],
+      '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 88.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\n\nclass blk(gr.sync_block):\n\
+      \    \n    def __init__(self):\n        # Solo argumentos por defecto aqu\xED\
+      \n        gr.sync_block.__init__(\n            self,\n            name='Promedios_de_tiempos',\
+      \  # Nombre que aparecer\xE1 en GRC\n            in_sig=[np.float32],\n    \
+      \        out_sig=[np.float32, np.float32, np.float32, np.float32, np.float32]\n\
+      \        )\n        \n        self.acum_anterior = 0\n        self.Ntotales\
+      \ = 0\n        self.acum_anterior1 = 0\n        self.acum_anterior2 = 0\n\n\
+      \    def work(self, input_items, output_items):\n        x = input_items[0]\
+      \  # Se\xF1al de entrada\n        y0 = output_items[0]  # Promedio de la se\xF1\
+      al\n        y1 = output_items[1]  # Media de la se\xF1al\n        y2 = output_items[2]\
+      \  # RMS de la se\xF1al\n        y3 = output_items[3]  # Potencia promedio de\
+      \ la se\xF1al\n        y4 = output_items[4]  # Desviaci\xF3n est\xE1ndar de\
+      \ la se\xF1al\n\n        # C\xE1lculo del promedio\n        N = len(x)\n   \
+      \     self.Ntotales += N\n        acumulado = self.acum_anterior + np.cumsum(x)\n\
+      \        self.acum_anterior = acumulado[-1]\n        y0[:] = acumulado / self.Ntotales\n\
+      \n        # C\xE1lculo de la media cuadr\xE1tica\n        x2 = np.multiply(x,\
+      \ x)\n        acumulado1 = self.acum_anterior1 + np.cumsum(x2)\n        self.acum_anterior1\
+      \ = acumulado1[-1]\n        y1[:] = acumulado1 / self.Ntotales\n\n        #\
+      \ C\xE1lculo del RMS\n        y2[:] = np.sqrt(y1)\n\n        # C\xE1lculo de\
+      \ la potencia promedio\n        y3[:] = np.multiply(y2, y2)\n\n        # C\xE1\
+      lculo de la desviaci\xF3n est\xE1ndar\n        x3 = np.multiply(x - y0, x -\
+      \ y0)\n        acumulado2 = self.acum_anterior2 + np.cumsum(x3)\n        self.acum_anterior2\
+      \ = acumulado2[-1]\n        y4[:] = np.sqrt(acumulado2 / self.Ntotales)\n\n\
+      \        return len(x)\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Promedios_de_tiempos', 'blk', [], [('0', 'float', 1)], [('0', 'float',
+      1), ('1', 'float', 1), ('2', 'float', 1), ('3', 'float', 1), ('4', 'float',
+      1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 192.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1_0
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\n\nclass blk(gr.sync_block):\n\
+      \    def __init__(self):\n        # Solo argumentos por defecto aqu\xED\n  \
+      \      gr.sync_block.__init__(\n            self,\n            name='Diferenciador',\
+      \  # Nombre que aparecer\xE1 en GRC\n            in_sig=[np.float32],\n    \
+      \        out_sig=[np.float32]\n        )\n        \n        # Atributo inicializado\
+      \ fuera de la llamada a __init__\n        self.acum_anterior = 0\n\n    def\
+      \ work(self, input_items, output_items):\n        x = input_items[0]  # Se\xF1\
+      al de entrada\n        y0 = output_items[0]  # Se\xF1al acumulada diferencial\n\
+      \n        N = len(x)\n\n        # C\xE1lculo de la diferencia acumulada\n  \
+      \      diff = np.cumsum(x) - self.acum_anterior\n        self.acum_anterior\
+      \ = np.cumsum(x)[-1]  # Guardar el \xFAltimo valor acumulado\n\n        # Asignar\
+      \ el resultado a la salida\n        y0[:] = diff\n\n        return len(x)  #\
+      \ Retorna la longitud de la se\xF1al de entrada procesada\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('Diferenciador', 'blk', [], [('0', 'float', 1)], [('0', 'float', 1)],
+      '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 144.0]
+    rotation: 0
+    state: enabled
+connections: []
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.9.2
