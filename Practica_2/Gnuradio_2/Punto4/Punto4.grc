@@ -65,14 +65,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [526, 20]
+    coordinate: [684, 27]
     rotation: 0
     state: enabled
 - name: h
   id: variable
   parameters:
     comment: ''
-    value: np.array([1,1,1,1])
+    value: np.array([0.0, 0.5, 1.0, 0.5, 0.0, -0.3, -0.6, -0.3, 0.0])
   states:
     bus_sink: false
     bus_source: false
@@ -89,7 +89,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [600, 23]
+    coordinate: [757, 25]
     rotation: 0
     state: enabled
 - name: Menu
@@ -159,7 +159,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 258]
+    coordinate: [793, 258]
     rotation: 0
     state: true
 - name: blocks_add_xx_0
@@ -399,7 +399,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [691, 30]
+    coordinate: [856, 29]
     rotation: 0
     state: true
 - name: interp_fir_filter_xxx_0
@@ -418,7 +418,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [673, 166]
+    coordinate: [673, 165]
     rotation: 0
     state: enabled
 - name: note_0
@@ -733,7 +733,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [14, 508]
+    coordinate: [13, 508]
     rotation: 0
     state: true
 - name: virtual_source_0_0

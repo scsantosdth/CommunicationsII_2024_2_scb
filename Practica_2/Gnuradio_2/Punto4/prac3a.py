@@ -78,7 +78,7 @@ class prac3a(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.h = h = np.array([1,1,1,1])
+        self.h = h = np.array([0.0, 0.5, 1.0, 0.5, 0.0, -0.3, -0.6, -0.3, 0.0])
         self.Sps = Sps = len(h)
         self.Rb = Rb = 32000
         self.samp_rate = samp_rate = Rb*Sps
