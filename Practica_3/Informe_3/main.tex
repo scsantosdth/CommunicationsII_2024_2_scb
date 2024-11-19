@@ -4,7 +4,7 @@
 \newcommand{\dochead}{Práctica 3}     
 
 % PASO 2. Reemplace "TÍTULO PRÁCTICA" por el título de la práctica que corresponda.
-\newcommand{\docsubhead}{De RF a EC (GNURadio)}  
+\newcommand{\docsubhead}{Conversión RF-EC}  
 
 % PASO 3. Reemplace "B1A - 02" por el grupo de la asignatura y el número de su grupo de laboratorio
 \newcommand{\teamname}{C1}     
@@ -51,8 +51,7 @@ Sergio Camilo Santos - 2172315\\
 \begin{multicols}{2}
 
 \begin{abstract}
-    En este informe se analiza el procesamiento de señales de radiofrecuencia (RF) utilizando su conversión a envolvente compleja (EC) para facilitar la modulación y demodulación. A través de GNURadio, se emplean bloques funcionales para generar y procesar señales de RF, mostrando su aplicación en sistemas de comunicación digital.
-    
+This report analyzes the processing of radio frequency (RF) signals using their conversion to complex envelope (CE) to facilitate modulation and demodulation. Through GNURadio, functional blocks are employed to generate and process RF signals, demonstrating their application in digital communication systems.    
 \end{abstract}
 
 \section{Introducción}
@@ -62,8 +61,7 @@ Sergio Camilo Santos - 2172315\\
 \section{Metodología}
 
 \subsection{Parte A: Comprobar el funcionamiento del frujograma}
-Se verificó el correcto funcionamiento del flujograma propuesto para la práctica, utilizando una señal OOK (On-Off Keying) tanto en su versión de radiofrecuencia (RF) como en su representación de envolvente compleja (EC) en banda base. Se hizo el analisis en el dominio del tiempo y frecuencia, comparando las señales moduladas RF y EC. Ademas, se repitieron las observaciones variando la frecuencia de la portadora, para análisis más detallado de cómo las señales RF y EC se comportan bajo diferentes condiciones. [1]
-
+Se verificó el correcto funcionamiento del flujograma propuesto para la práctica, utilizando una señal OOK (On-Off Keying) tanto en su versión de radiofrecuencia (RF) como en su representación de envolvente compleja (EC) en banda base. Se hizo el analisis en el dominio del tiempo y frecuencia, comparando las señales moduladas RF y EC. Ademas, se repitieron las observaciones variando la frecuencia de la portadora. \cite{flujgrama}
 
 \subsection{Parte B: Comprender los bloques 'e\_RF\_VCO\_ff' y 'e\_EC\_VCO\_fc'}
 Para comprender los bloques 'e\_RF\_VCO\_ff' y 'e\_EC\_VCO\_fc', se comenzó abriendo cada uno en el entorno de GNURadio y seleccionando la opción "Open in Editor" para examinar su código Python. Se modificaron los comentarios de ayuda (help) en inglés para ofrecer una explicación más detallada sobre sus parametros, entradas, salidas y operación.
@@ -72,7 +70,8 @@ Para comprender los bloques 'e\_RF\_VCO\_ff' y 'e\_EC\_VCO\_fc', se comenzó abr
 
 Para implementar la modulación BPSK en versiones RF y EC, se adaptó el flujograma inicial, activando bloques desactivados y estableciendo las interconexiones necesarias para implementar la modulación BPSK en versiones RF y EC. Y se realizaron pruebas similares a las del punto 1, aplicadas a la modulación BPSK.
 
-
+\subsection{Parte D: Modulación FSK versión RF y EC y constelación}
+Se configuró el flujograma para implementar la modulación FSK en RF y EC guardado como \texttt{RF\_EC\_fsk.grc}, realizando pruebas con variaciones en la frecuencia portadora y la desviación de frecuencias. Se analizaron las señales moduladas en los dominios del tiempo y la frecuencia.
 
 \subsection{Parte E: Preguntas de control}
 Preguntas de auto control sobre el flujograma randombinayrectsignal.grc
@@ -81,19 +80,22 @@ Preguntas de auto control sobre el flujograma randombinayrectsignal.grc
 \subsection{Parte A: Comprobar el funcionamiento del frujograma}
 
 
-En el dominio del tiempo (Figura 1), se observó que la señal RF modulada (señal roja) sigue un comportamiento On-Off Keying (OOK), la portadora sinusoidal aparece solo cuando la señal moduladora (señal azul) es "1" y desaparece cuando es "0". Al aumentar la frecuencia de la portadora, se observó el incremento el número de ciclos de la señal sinusoidal cuando está activa.[2]
+En el dominio del tiempo  ({Figura 1), se observó que la señal RF modulada (señal roja) sigue un comportamiento On-Off Keying (OOK) y se observó el incremento el número de ciclos de la señal sinusoidal cuando está activa.\cite{OOK}
+
 
     \begin{center}
     \includegraphics[width=0.45\textwidth]{figs/F1.png}
-    \caption{Figura 1: Gráfica en tiempo RF modulada}
+    \caption{Figura 1: Gráfica en tiempo RF modulada en OOK}
     \label{fig:1}
     \end{center}
 
-Además, en la representación de envolvente compleja (EC) (figura 2), la componente "I" sigue los mismos patrones binarios de la señal moduladora, mientras que la componente "Q" se mantiene siempre en cero, ya que no hay información en cuadratura en la modulación OOK. 
+
+
+Además, en la representación de envolvente compleja (EC)({Figura 2}), la componente 'I' es igual de la señal moduladora, mientras que la componente "Q" siempre es cero, ya que no hay información en cuadratura en la modulación OOK. 
 
     \begin{center}
     \includegraphics[width=0.45\textwidth]{figs/F2.png}
-    \caption{Figura 2: Gráfica en tiempo EC modulada}
+    \caption{Figura 2: Gráfica en tiempo EC modulada en OOK}
     \label{fig:2}
     \end{center}
 
@@ -109,59 +111,251 @@ En el caso de la EC como se observó en la figura 4, que el espectro se concentr
 
     \begin{center}
         \includegraphics[width=0.45\textwidth]{figs/F4.png}
-        \caption{Figura 4: PSD de la EC modulada}
+        \caption{Figura 4: PSD de la EC modulada en OOK}
         \label{fig:4}
     \end{center}
    
-
-\subsection{Parte C: Modulación BPSK versión RF y EC}
-
-   
+  
 \subsection{Parte B: Comprender los bloques 'e\_RF\_VCO\_ff' y 'e\_EC\_VCO\_fc'}
 
 \begin{itemize}
  
    \item Boque: 'e\_RF\_VCO\_ff'
 
-This block is an RF VCO that generates a sinusoidal signal with a frequency controlled by input signals. 
+This block is an RF VCO that generates a sinusoidal signal.
 
-The parameters include \textit{fc} (Carrier Frequency), setting the oscillator's base frequency at a default of 128 kHz, and \textit{samp\_rate} which defines the number of samples per second used by the system, defaulting to 320 kHz.
+The parameters include \textit{fc} (Carrier Frequency), setting the oscillator's base frequency at a default of 128 kHz, and \textit{samp\_rate} defines the number of samples per second used by the system, defaulting to 320 kHz.
   
-The first input, \textit{A}, controls the output signal's amplitude, while the second input, \textit{Q}, modulates the phase. The output is a sinusoidal signal, with amplitude determined by \textit{A} and phase by \textit{Q}, and its frequency is based on \textit{fc} and the phase shift \textit{Q}.
+The first input, \textit{A}, controls the output signal's amplitude. The second input, \textit{Q}, modulates the phase. The output is a sinusoidal signal, with amplitude determined by \textit{A} and phase by \textit{Q}, and its frequency is based on \textit{fc} and the phase shift \textit{Q}.
 
     \item Boque: 'e\_EC\_VCO\_fc'
 
-This block is a CE Voltage-Controlled Oscillator (VCO), or baseband VCO, and works as follows: it generates a complex sinusoidal signal based on the input signals. The block takes two input signals: 
+This block is a CE Voltage-Controlled Oscillator (VCO), or baseband VCO, and works as follows: it generates a complex sinusoidal signal based on the input signals. 
 
-the first input, \textit{A}, which controls the amplitude of the output signal, and the second input, \textit{Q}, which modulates the phase of the generated signal. The output is a complex-valued signal, where the real part corresponds to the in-phase component and the imaginary part to the quadrature component.
+the first input, \textit{A}, which controls the amplitude of the output signal, and the second input, \textit{Q}, modulates the phase of the generated signal. The output is a complex-valued signal, where the real part corresponds to the in-phase component and the imaginary part to the quadrature component.
  
 \end{itemize}
 
 \subsection{Parte C: Modulación BPSK versión RF y EC}
 
+Como se observa en la figura 5 a señal modulada en RF es una portadora sinusoidal cuya fase cambia en función de la modulating signal. Un nivel alto mantiene la fase original de la portadora, mientras que un nivel bajo cambia la fase dependiendo de la posición en el diagrama de constelación. Esto genera una señal continua donde cada bit de la señal moduladora corresponde a un estado de fase definido.
+
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F5.png}
+        \caption{Figura 5: Gráfica en tiempo RF modulada en BPSK}
+        \label{fig:5}
+    \end{center}
+    
+    
+En la figura 6 de la señal EC modulated signal, se observa que la componente I (real) alterna entre los valores 0.5 y 1, mientras que la componente Q (imaginaria) varía entre 0.8 y 0. Esto corresponde a los puntos de la constelación ubicados en (0.5, 0.8) y (1, 0), reflejando la modulación BPSK en el plano complejo. La señal I tiene una forma escalonada que representa cambios en la amplitud según los bits transmitidos, mientras que la señal Q también exhibe una forma escalonada, indicando la variación de fase asociada.
+
+
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F6.png}
+        \caption{Figura 6: Gráfica en tiempo EC en BPSK}
+        \label{fig:6}
+    \end{center}
+    
+La diferencia clave entre BPSK en versión RF y EC es que, en RF, solo se modula la fase de la portadora, mientras que en EC se modulan tanto la fase como la amplitud.\cite{libro1}
+
+
+\subsection{Parte D: Modulación FSK versión RF y EC y constelación}
+
+\paragraph{Resumen del flujo general:}
+En este proceso, la señal original se genera como un flujo de valores aleatorios, que se transforma gradualmente mediante escalado, interpolación y acumulación. Finalmente, se obtiene la modulación FSK en dos versiones: RF (Radio Frecuencia) y EC (Banda Base Compleja). Los bloques \texttt{Virtual Sink} permiten monitorear y analizar cada etapa del flujo.
+\paragraph{Comportamiento de la señal modulada:}
+En la figura 7 se puede observar la seña modulada en version RF y EC con una frecuencia portadora constante de 128000 Hz y una desviaciónde frecuencia de 32000 Hz que seran los valores de frecuencias constantes que se utilizaran para hacer las siguientes variaciones.
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F7.png}
+        \caption{Figura 7: Gráfica en tiempo RF y EC en fSK con frecuencias constantes}
+        \label{fig:7}
+    \end{center}
+Mientras se observa el comportamiento de la señal modulada en versión RF y en versión EC en el dominio del tiempo (pestaña \texttt{Modulated-Time}):En la figura 8 La frecuencia de la portadora se varía a un valor de 323584 Hz, pero la desviación de frecuencias se mantiene constante.
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F8.png}
+        \caption{Figura 8: Gráfica en tiempo RF y EC en fSK variando la frecuencia prtadora}
+        \label{fig:8}
+    \end{center}
+Ahora en la figura 9 la frecuencia de la portadora se mantiene constante, pero se varía la desviación de frecuencias a un valor de 61440 Hz.
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F9.png}
+        \caption{Figura 9: Gráfica en tiempo RF y EC en fSK variando la desviacion de frecuancia}
+        \label{fig:9}
+    \end{center}
+\paragraph{Observaciones de FSK en el dominio de las frecuencias}
+En estas observaciones se trabaja con las mismas constantes y las mismas variaciones que en las observacionesde RF y EC, esta vez observando (pestaña Modulated-Freq)
+En la figura 10 la frecuencia de la portadora se varía a un valor de 323584 Hz, pero la desviación de frecuencias se mantiene constante.
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F10.png}
+        \caption{Figura 10: Gráfica en frecuencias RF y EC en fSK variando la frecuancia portadora}
+        \label{fig:10}
+    \end{center}
+ En la figura 11 la frecuencia de la portadora se mantiene constante, pero se varía la desviación de frecuencias a un valor de 61440 Hz.
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F11.png}
+        \caption{Figura 11: Gráfica en frecuencias RF y EC en fSK variando la desviación de frecuencia}
+        \label{fig:11}
+    \end{center}
+valor para la frecuencia portadora y para la desviación de 
+frecuencias en el cual el espectro se puede distinguir con el menor solapamiento posible. 
+Valores propuestos frecuencia portadora=512000 Hz, desviación de frecuencia=50000Hz
+
+\paragraph{Observaciones de FSK en la Constelación}
+En estas observaciones se trabaja con las mismas constantes y las mismas variaciones en (pestaña Constellation).
+En la figura 12 la frecuencia de la portadora se varía a un valor de 323584 Hz, pero la desviación de frecuencias se mantiene constante.
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F12.png}
+        \caption{Figura 12: Gráfica de constelaciones variando la frecuancia portadora}
+        \label{fig:12}
+    \end{center}
+ En la figura 13 la frecuencia de la portadora se mantiene constante, pero se varía la desviación de frecuencias a un valor de 61440 Hz.
+ \begin{center}
+        \includegraphics[width=0.45\textwidth]{figs/F16.png}
+        \caption{Figura 13: Gráfica de constelaciones variando la desviación de frecuencia}
+        \label{fig:13}
+    \end{center}
+Explique cómo es la constelación de una señal con modulación FSK.
+El diagrama de constelación es una representación gráfica que ilustra los diferentes estados posibles de la señal modulada. En el caso de FSK:
+una señal FSK no tiene una constelación en el sentido tradicional. 
+Ejes del Diagrama: En lugar de representar las fases como en otras modulaciones (por ejemplo, PSK), los ejes del diagrama de constelación para FSK representan las frecuencias f1 y f2. Cada punto en el diagrama corresponde a un símbolo que representa una de las frecuencias utilizadas en la modulación.
+Símbolos: Los símbolos en el diagrama no están dispuestos en un círculo como en PSK, sino que están ubicados a lo largo del eje horizontal (frecuencia) y vertical (amplitu). Esto significa que cada punto indica la frecuencia correspondiente a un símbolo específico.
+
+
 \subsection{Parte E: Preguntas de control}
+
+\section*{I.}
+Para determinar si el valor de SPS elegido es apropiado, se debe considerar lo siguiente:
+
+\begin{itemize}
+    \item El valor de SPS debe ser suficientemente alto para evitar problemas de aliasing y asegurar una adecuada representación de la señal modulada en RF. Generalmente, se recomienda usar un valor de SPS al menos 4-8 veces mayor que el ancho de banda de la señal modulada.
+    \item Un valor de SPS muy alto, aunque ayuda a reducir el aliasing, también aumenta la carga computacional. Se debe encontrar un equilibrio entre la calidad de la señal y los recursos disponibles.
+    \item Para evaluar si el valor de SPS es apropiado, se puede analizar la señal modulada en el dominio de la frecuencia utilizando el bloque \texttt{qtgui\_freq\_sink\_x\_0}. Debe observarse una adecuada representación espectral sin problemas de aliasing.
+\end{itemize}
+
+\section*{II.}
+Si el bloque \texttt{Multiply Const} se configura con un valor de 1, el resultado sería el mismo que quitarlo por completo. Esto se debe a que multiplicar por 1 no tiene ningún efecto sobre la señal.
+
+\section*{III.}
+La fórmula dentro del bloque \texttt{Multiply Const} para la modulación FSK sería:
+
+\[
+\text{Const} = \frac{2 \pi \cdot f_d}{R_b \cdot \text{SPS}}
+\]
+
+Donde:
+\begin{itemize}
+    \item $f_d$ es la desviación de frecuencia
+    \item $R_b$ es la tasa de bits
+    \item \text{SPS} es el número de muestras por símbolo
+\end{itemize}
+
+Esta fórmula calcula el factor de multiplicación necesario para desviar la frecuencia de la portadora de acuerdo a la señal modulante.
+
+\section*{IV.}
+El bloque \texttt{Constant Source} se configura a 0 para la modulación OOK porque en este caso la señal modulante simplemente enciende y apaga la portadora. No se requiere ninguna otra señal de entrada.
+
+Para la modulación BPSK y FSK, la señal del bloque \texttt{Constant Source} se utiliza como la segunda entrada de los VCO, proporcionando la señal de fase o frecuencia que se modula.
+
+\section*{V.}
+En el caso de la modulación OOK, la señal modulante entra por la primera entrada de los VCO porque es la única entrada necesaria. Esta señal controla la amplitud de la portadora.
+
+Para la modulación BPSK y FSK, la señal modulante entra por la segunda entrada de los VCO porque se utiliza para modular la fase o frecuencia de la portadora, mientras que la primera entrada se reserva para una señal de amplitud constante.
+
+\section*{VI-VII.}
+Sí, sería posible reubicar el bloque \texttt{Interpolating FIR Filter} para que quede inmediatamente antes de los VCO tanto en la modulación BPSK como en la FSK. Esto no cambiaría el funcionamiento del sistema, sino que simplemente modificaría la ubicación del filtro en el diagrama de bloques.
+
+
+\section*{a.}
+Para crear un VCO RF con entradas de amplitud y frecuencia, usaría los siguientes bloques de GNU Radio:
+
+\begin{itemize}
+    \item \texttt{epy\_block} para el VCO RF en sí, tomando las señales de amplitud y frecuencia como entradas y generando la señal RF modulada como salida.
+    \item \texttt{qtgui\_time\_sink\_x} y \texttt{qtgui\_freq\_sink\_x} para visualizar las señales moduladoras y la salida RF en el dominio del tiempo y la frecuencia.
+\end{itemize}
+
+Los aspectos clave serían:
+\begin{itemize}
+    \item Implementar la funcionalidad del VCO RF en el \texttt{epy\_block} personalizado, convirtiendo las entradas de amplitud y frecuencia en una señal RF.
+    \item Conectar las señales moduladoras de amplitud y frecuencia a las entradas del \texttt{epy\_block}.
+    \item Usar los bloques de visualización para mostrar las señales en varios puntos del flujo.
+\end{itemize}
+
+\section*{b.}
+Para el caso FSK dado, la máxima frecuencia de portadora $f_c$ permitida sería:
+
+\[
+f_{c_{\text{max}}} = \frac{R_b \cdot S_{ps}}{8}
+\]
+
+Donde:
+\begin{itemize}
+    \item $R_b$ es la tasa de bits (32000)
+    \item $S_{ps}$ es el número de muestras por símbolo (128)
+\end{itemize}
+
+Sustituyendo los valores:
+
+\[
+f_{c_{\text{max}}} = \frac{32000 \cdot 128}{8} = 512000 \, \text{Hz}
+\]
+
+Por lo tanto, la máxima frecuencia de portadora permitida sería 512 kHz.
+
+\section*{c.}
+Para el caso FSK dado, la máxima desviación de frecuencia $f_d$ permitida sería:
+
+\[
+f_{d_{\text{max}}} = \frac{R_b}{2}
+\]
+
+Donde:
+\begin{itemize}
+    \item $R_b$ es la tasa de bits (32000)
+\end{itemize}
+
+Sustituyendo el valor:
+
+\[
+f_{d_{\text{max}}} = \frac{32000}{2} = 16000 \, \text{Hz}
+\]
+
+Por lo tanto, la máxima desviación de frecuencia permitida sería 16 kHz.
+
+\section*{d.}
+Para el caso BPSK dado, el mínimo valor de SPS (muestras por símbolo) sería:
+
+\[
+SPS_{\text{min}} = 2
+\]
+
+Este es el mínimo requerido para representar adecuadamente la señal modulada en BPSK y reconstruir los bits originales.
 
 \section{Conclusiones}
 
 \begin{itemize}
     
-    \item La Conversión RF-EC es un proceso que convierte las señales en radiofrecuencia (RF) a su correspondiente Envolvente Compleja (EC). Esta transformación es fundamental en la tecnología de Radio Definida por Software (SDR), donde el software puede procesar las señales en el dominio de la EC, a diferencia de las señales RF, que físicamente viajan a frecuencias más altas. La ventaja de trabajar con EC es que permite representar y analizar señales de manera más sencilla utilizando herramientas como GNURadio.
-
+    \item Se lograron identificar las principales diferencias entre las modulaciones RF y EC a través de las señales generadas y analizadas en GNURadio. En la modulación RF, las señales se procesaron directamente en alta frecuencia, mientras que en EC se separaron en las componentes I (real) y Q (imaginaria), lo que permitió un análisis más detallado y adaptable en sistemas digitales.
+    
+    \item En el dominio del tiempo, cada modulación presentó características específicas. Por ejemplo, la modulación FSK mostró transiciones de frecuencia, mientras que BPSK y OOK destacaron por sus cambios abruptos en fase o encendido/apagado de la portadora, respectivamente.
+    
+    \item En las modulaciones EC, las señales moduladas se descomponen en I y Q, permitiendo procesarlas más fácil en sistemas digitales y simplifica la demodulación. En cambio, las modulaciones RF trabajan directamente con la señal portadora, lo que requiere más directo, pero menos versátil para sistemas modernos.
+    
+    \item Las simulaciones y análisis evidenciaron cómo los principios teóricos de la modulación digital se aplican en sistemas reales, permitiendo comprender las características y limitaciones de cada técnica para su implementación en aplicaciones prácticas.
+     
+    
 \end{itemize}
 
 \begin{thebibliography}{1}
 
 \bibitem{flujgrama}
-Flujograma: link
+"Flujograma del proyecto en GNURadio", [En línea]: \url{https://github.com/hortegab/ComdigPractices2021sii/blob/main/Fase%20I/Pract4/RF_EC_ook.grc}.
 
 \bibitem{OOK}
-Modulacion OOK: https://n9.cl/pekzh
-
-\bibitem{comu} 
-Stanford University - Lectures on Digital Communications, \textit{https://web.stanford.edu/class/ee179/lectures/notes14.pdf}
+"Modulación On-Off Keying (OOK)," [En línea]: \url{https://n9.cl/pekzh}.
 
 \bibitem{libro1} 
-\textit{Comunicaciones Digitales basadas en radio definida por software}, ORTEGA - REYES, UIS, 2019.
+H. Ortega y R. Reyes, *Comunicaciones Digitales Basadas en Radio Definida por Software*. Capítulo 5, (UIS), 2019.
+
 
 \end{thebibliography}
 
